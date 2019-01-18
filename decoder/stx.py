@@ -42,6 +42,7 @@ def decode(symbols):
         #print("{0} -> {1}  {2}".format(lastMapI, currMapI, dir))
 
     if len(buf) < 96:
-        print("SHORT FRAME: Missing {} bits".format(96-len(buf)))
+        print("DROPPING SHORT FRAME: Demodulator lost lock?")
+        return
     else:
         print(buf)
