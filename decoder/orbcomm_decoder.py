@@ -47,4 +47,8 @@ def start_socket():
 
 
 init_color()
-init()
+
+try:
+    init()
+except KeyboardInterrupt:
+    print("Exiting...")
