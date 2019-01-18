@@ -8,13 +8,14 @@ import argparse
 from colorama import init as init_color
 from colorama import Fore, Back, Style
 from socket import *
-import stx
+from stx import STX
 import tools
 
 ver = 1.0
 udpIP = "0.0.0.0"
 udpTimeout = 10
 udpSocket = socket(AF_INET, SOCK_DGRAM)
+stx = STX()
 
 # Parse arguments
 argparser = argparse.ArgumentParser(description="Orbcomm STX Decoder v{0}".format(ver))
