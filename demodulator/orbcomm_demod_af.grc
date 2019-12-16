@@ -90,6 +90,33 @@
     </param>
   </block>
   <block>
+    <key>variable</key>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(344, 12)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>frame_len</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>600</value>
+    </param>
+  </block>
+  <block>
     <key>variable_qtgui_range</key>
     <param>
       <key>comment</key>
@@ -625,7 +652,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>file</key>
@@ -633,7 +660,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1088, 404)</value>
+      <value>(1224, 404)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -653,7 +680,7 @@
     </param>
     <param>
       <key>vlen</key>
-      <value>packet_len</value>
+      <value>frame_len</value>
     </param>
   </block>
   <block>
@@ -841,6 +868,49 @@
     </param>
   </block>
   <block>
+    <key>blocks_pack_k_bits_bb</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(904, 476)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>blocks_pack_k_bits_bb_0</value>
+    </param>
+    <param>
+      <key>k</key>
+      <value>8</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
     <key>blocks_stream_to_vector</key>
     <param>
       <key>alias</key>
@@ -860,7 +930,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(912, 476)</value>
+      <value>(1040, 476)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -884,7 +954,7 @@
     </param>
     <param>
       <key>num_items</key>
-      <value>packet_len</value>
+      <value>frame_len</value>
     </param>
     <param>
       <key>vlen</key>
@@ -907,7 +977,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -962,7 +1032,7 @@
     </param>
     <param>
       <key>ipaddr</key>
-      <value></value>
+      <value>127.0.0.1</value>
     </param>
     <param>
       <key>port</key>
@@ -974,7 +1044,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1088, 508)</value>
+      <value>(1224, 508)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -998,7 +1068,7 @@
     </param>
     <param>
       <key>vlen</key>
-      <value>packet_len</value>
+      <value>frame_len</value>
     </param>
   </block>
   <block>
@@ -2522,6 +2592,12 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
+    <source_block_id>blocks_pack_k_bits_bb_0</source_block_id>
+    <sink_block_id>blocks_stream_to_vector_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
     <source_block_id>blocks_stream_to_vector_0</source_block_id>
     <sink_block_id>blocks_file_sink_0</sink_block_id>
     <source_key>0</source_key>
@@ -2571,7 +2647,7 @@
   </connection>
   <connection>
     <source_block_id>digital_constellation_decoder_cb_0</source_block_id>
-    <sink_block_id>blocks_stream_to_vector_0</sink_block_id>
+    <sink_block_id>blocks_pack_k_bits_bb_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
