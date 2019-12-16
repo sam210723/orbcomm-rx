@@ -11,8 +11,8 @@ import socket
 
 # Globals
 args = None             # Parsed CLI arguments
-sck = None              # UDP socket object
-buflen = 96             # Socket buffer length (one packet)
+sck = None              # Symbol socket object
+buflen = 600            # Symbol socket buffer length (one frame)
 ver = "1.0"             # orbcomm-rx version
 
 # Constants
@@ -45,6 +45,7 @@ def loop():
 
     while True:
         data = sck.recv(buflen)
+        print(data.find(b'\xA6\x15\x9F'))
 
 
 def config_socket():
