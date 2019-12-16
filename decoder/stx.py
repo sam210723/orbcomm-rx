@@ -47,10 +47,17 @@ class STX:
 
             #print("{0} -> {1}  {2}".format(lastMapI, currMapI, dir))
 
+        # Handle short frames
         if len(frame) < 96:
             self.df += 1
-            print("SHORT FRAME ({}): {} bits, {}%".format(self.df, 96-len(frame), round((len(frame)/96)*100, 1)))
+            print("SHORT FRAME: {} bits, {}%".format(96-len(frame), round((len(frame)/96)*100, 1)))
             return
         else:
-            return
+            frameHex = '%08X' % int(frame, 2)
             print(frame)
+
+        # Search for frame sync
+        sync = '65A8F9'
+        #sync = 'F9A865'
+        if frameHex.find(sync) != -1:
+            print("SYNC!")
