@@ -104,7 +104,7 @@ venv.bak/
 .mypy_cache/
 
 
-# Build, IDE and output files
+# Build and output files
+demodulator/orbcomm_demod_af.py
 demodulator/symbols.bin
-demodulator/orbcomm_demod.py
-decoder/.idea/
+demodulator/old/*
