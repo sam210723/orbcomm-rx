@@ -12,13 +12,13 @@ import socket
 # Globals
 args = None             # Parsed CLI arguments
 sck = None              # Symbol socket object
-buflen = 600            # Symbol socket buffer length (one frame)
+buflen = 4800           # Symbol socket buffer length (two minor frames)
 ver = "1.0"             # orbcomm-rx version
 
 # Constants
 ADDR = "127.0.0.1"      # Default symbol address
 PORT = 1234             # Default symbol port
-
+SYNC = b'\x01\x00\x01\x00\x00\x01\x01\x00\x00\x00\x00\x01\x00\x01\x00\x01\x01\x00\x00\x01\x01\x01\x01\x01'
 
 def init():
     print("┌──────────────────────────────────────────────┐")
@@ -45,7 +45,8 @@ def loop():
 
     while True:
         data = sck.recv(buflen)
-        print(data.find(b'\xA6\x15\x9F'))
+        #print(data.find(b'\xA6\x15\x9F'))
+        print(data.find())
 
 
 def config_socket():
