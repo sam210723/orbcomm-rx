@@ -323,7 +323,7 @@
     </param>
     <param>
       <key>rate</key>
-      <value>0.01</value>
+      <value>0.1</value>
     </param>
     <param>
       <key>reference</key>
@@ -350,15 +350,15 @@
     </param>
     <param>
       <key>device_name</key>
-      <value>Virtual Cable (INPUT) (VB-Audio Virtual Cable)</value>
+      <value></value>
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(224, 256)</value>
+      <value>(120, 256)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -589,7 +589,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>file</key>
@@ -636,11 +636,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(464, 256)</value>
+      <value>(416, 256)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -679,11 +679,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(464, 176)</value>
+      <value>(416, 176)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -781,7 +781,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(464, 128)</value>
+      <value>(320, 288)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -790,6 +790,53 @@
     <param>
       <key>id</key>
       <value>blocks_null_sink_0</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>float</value>
+    </param>
+    <param>
+      <key>num_inputs</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
+    </param>
+  </block>
+  <block>
+    <key>blocks_null_sink</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>bus_conns</key>
+      <value>[[0,],]</value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(320, 208)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>blocks_null_sink_0_0</value>
     </param>
     <param>
       <key>type</key>
@@ -914,11 +961,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(664, 228)</value>
+      <value>(584, 188)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1024,7 +1071,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>file</key>
@@ -1032,7 +1079,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(224, 176)</value>
+      <value>(120, 176)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -2563,7 +2610,7 @@
   </connection>
   <connection>
     <source_block_id>blocks_float_to_complex_0</source_block_id>
-    <sink_block_id>blocks_throttle_0</sink_block_id>
+    <sink_block_id>dc_blocker_xx_1</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -2611,7 +2658,7 @@
   </connection>
   <connection>
     <source_block_id>blocks_wavfile_source_0</source_block_id>
-    <sink_block_id>blocks_null_sink_0</sink_block_id>
+    <sink_block_id>blocks_null_sink_0_0</sink_block_id>
     <source_key>1</source_key>
     <sink_key>0</sink_key>
   </connection>
