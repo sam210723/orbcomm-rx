@@ -354,7 +354,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -589,7 +589,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>file</key>
@@ -617,7 +617,7 @@
     </param>
     <param>
       <key>vlen</key>
-      <value>frame_len*8</value>
+      <value>frame_len</value>
     </param>
   </block>
   <block>
@@ -636,7 +636,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -679,7 +679,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -777,7 +777,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -824,7 +824,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -867,7 +867,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>2</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -938,7 +938,7 @@
     </param>
     <param>
       <key>num_items</key>
-      <value>frame_len*8</value>
+      <value>frame_len</value>
     </param>
     <param>
       <key>vlen</key>
@@ -961,7 +961,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1044,7 +1044,7 @@
     </param>
     <param>
       <key>psize</key>
-      <value>frame_len*8</value>
+      <value>frame_len</value>
     </param>
     <param>
       <key>eof</key>
@@ -1052,7 +1052,7 @@
     </param>
     <param>
       <key>vlen</key>
-      <value>frame_len*8</value>
+      <value>frame_len</value>
     </param>
   </block>
   <block>
@@ -1071,7 +1071,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>file</key>
@@ -1103,7 +1103,7 @@
     </param>
     <param>
       <key>repeat</key>
-      <value>True</value>
+      <value>False</value>
     </param>
   </block>
   <block>
