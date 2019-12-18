@@ -109,3 +109,4 @@ demodulator/orbcomm_demod_af.py
 demodulator/symbols.bin
 demodulator/old/*
 decoder/old/*
+*.bin
