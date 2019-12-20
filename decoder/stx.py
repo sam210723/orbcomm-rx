@@ -5,6 +5,8 @@ https://github.com/sam210723/orbcomm-rx
 Parsing functions for Orbcomm STX packets
 """
 
+SYNC = 0xA6159F
+
 class Frame():
     """
     Parses minor frame

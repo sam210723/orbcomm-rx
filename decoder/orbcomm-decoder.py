@@ -12,16 +12,19 @@ import math
 import os
 import socket
 import stx as STX
+import time
 
 
 # Globals
 args = None             # Parsed CLI arguments
 config = None           # Config parser object
+stime = None            # Processing start time
 source = None           # Input source type
 sck = None              # Symbol socket object
 buflen = 600            # Symbol socket buffer length (one minor frame)
 symbolf = None          # Symbol input file
 packetf = None          # Packet output file
+locked = False          # Decoder lock state
 ver = "1.0"             # orbcomm-rx version
 
 
@@ -35,6 +38,7 @@ def init():
 
     global args
     global config
+    global stime
     global packetf
     
     # Handle arguments and config file
@@ -54,6 +58,9 @@ def init():
 
     print("──────────────────────────────────────────────────────────────────────────────────\n")
 
+    # Get processing start time
+    stime = time.time()
+
     # Ender main loop
     loop()
 
@@ -63,38 +70,67 @@ def loop():
     Handles data from the symbol socket
     """
 
-    frame = None
+    global locked
 
+    buf = None
     loffset = -1
+
     while True:
+        # Get data from input source
         if source == "UDP":
             data = sck.recv(buflen)
         elif source == "FILE":
+            # Read symbols from file
             data = symbolf.read(buflen)
 
-        # Sync minor frame
-        SYNC = 0xA6159F
+            # No more data to read from file
+            if data == b'':
+                symbolf.close()
+                run_time = round(time.time() - stime, 3)
+                print("FINISHED PROCESSING SYMBOL FILE IN {}".format(run_time))
+                exit()
+
+        # Unpack symbol bytes to bits
         bits = bitstring.BitArray(data)
         
-        offset = bits.find(hex(SYNC), bytealigned=False)
+        # Find sync word in symbols
+        offset = bits.find(hex(STX.SYNC), bytealigned=False)
 
+        # If sync word found
         if offset:
+            # Set lock state
+            if not locked: print("LOCKED")
+            locked = True
+
+            # Get sync word offset value
             offset = offset[0]
-            #print("OFFSET: {} bits".format(offset))
             
+            # If offset has changed from previous frame
             if offset != loffset:
-                frame = None
-                frame = bits[offset:]
+                # Start fresh frame
+                buf = bits[offset:]
             else:
-                frame += bits
-                if len(frame) > 4800 and args.dump:
-                    packetf.write(frame[:4800].tobytes())
+                # Concat frame data
+                buf += bits
 
-                    f = STX.Frame(frame)
+                # If frame is full length
+                if len(buf) > 4800:
+                    fbytes = buf.tobytes()[:600]
 
-                    frame = frame[4800:]
+                    # Parse frame
+                    frame = STX.Frame(fbytes)
+
+                    # Write frame to file
+                    if args.dump: packetf.write(fbytes)
+
+                    # Remove parsed frame from buffer
+                    buf = buf[4800:]
             
             loffset = offset
+        else:
+            # Set lock state
+            if locked: print("UNLOCKED")
+            locked = False
 
 
 def config_input():
