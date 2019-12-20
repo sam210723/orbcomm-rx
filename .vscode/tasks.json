@@ -6,7 +6,7 @@
         {
             "label": "Orbcomm Decoder",
             "type": "shell",
-            "command": "python decoder\\orbcomm-decoder.py"
+            "command": "python decoder\\orbcomm-decoder.py --dump decoder\\frames.bin"
         }
     ]
 }
