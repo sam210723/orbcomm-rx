@@ -52,6 +52,9 @@ def loop():
     Handles data from the symbol socket
     """
 
+    frame = None
+
+    loffset = -1
     while True:
         data = sck.recv(buflen)
 
@@ -64,13 +67,16 @@ def loop():
             offset = offset[0]
             print("OFFSET: {} bits".format(offset))
             
-            l = 4800-offset-(offset%8)
-            frame = bits[offset:offset+l]
-        
-            if args.dump:
-                packetf.write(frame.tobytes())
-        
-
+            if offset != loffset:
+                frame = None
+                frame = bits[offset:]
+            else:
+                frame += bits
+                if len(frame) > 4800 and args.dump:
+                    packetf.write(frame[:4800].tobytes())
+                    frame = frame[4800:]
+            
+            loffset = offset
 
 
 def config_socket():
