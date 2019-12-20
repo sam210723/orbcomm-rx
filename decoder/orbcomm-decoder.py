@@ -11,7 +11,7 @@ import configparser
 import math
 import os
 import socket
-import stx
+import stx as STX
 
 
 # Globals
@@ -73,14 +73,14 @@ def loop():
             data = symbolf.read(buflen)
 
         # Sync minor frame
-        SYNC = '0xA6159F'
+        SYNC = 0xA6159F
         bits = bitstring.BitArray(data)
         
-        offset = bits.find(SYNC, bytealigned=False)
+        offset = bits.find(hex(SYNC), bytealigned=False)
 
         if offset:
             offset = offset[0]
-            print("OFFSET: {} bits".format(offset))
+            #print("OFFSET: {} bits".format(offset))
             
             if offset != loffset:
                 frame = None
@@ -89,6 +89,9 @@ def loop():
                 frame += bits
                 if len(frame) > 4800 and args.dump:
                     packetf.write(frame[:4800].tobytes())
+
+                    f = STX.Frame(frame)
+
                     frame = frame[4800:]
             
             loffset = offset
