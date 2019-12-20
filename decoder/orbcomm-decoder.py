@@ -9,6 +9,7 @@ import argparse
 import bitstring
 import configparser
 import math
+import os
 import socket
 import stx
 
@@ -19,6 +20,7 @@ config = None           # Config parser object
 source = None           # Input source type
 sck = None              # Symbol socket object
 buflen = 600            # Symbol socket buffer length (one minor frame)
+symbolf = None          # Symbol input file
 packetf = None          # Packet output file
 ver = "1.0"             # orbcomm-rx version
 
@@ -42,9 +44,8 @@ def init():
 
     # Exit if input config fails
     if not config_input():
-        if args.dump: packetf.close()
         print("Exiting...")
-        exit(1)
+        exit()
 
     # Open packet file
     if args.dump:
@@ -66,8 +67,12 @@ def loop():
 
     loffset = -1
     while True:
-        data = sck.recv(buflen)
+        if source == "UDP":
+            data = sck.recv(buflen)
+        elif source == "FILE":
+            data = symbolf.read(buflen)
 
+        # Sync minor frame
         SYNC = '0xA6159F'
         bits = bitstring.BitArray(data)
         
@@ -95,6 +100,7 @@ def config_input():
     """
 
     global sck
+    global symbolf
 
     if source == "UDP":
         sck = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -112,6 +118,19 @@ def config_input():
             print(e)
 
             return False
+    elif source == "FILE":
+        # Check symbol file exists
+        if not os.path.exists(args.file):
+            print("INPUT FILE DOES NOT EXIST\nExiting...")
+            exit()
+        
+        symbolf = open(args.file, 'rb')
+        print("Opened input file: \"{}\"".format(args.file))
+        
+        return True
+    else:
+        print("INVALID SOURCE: \"{}\"".format(source))
+        exit()
 
 
 def parse_args():
@@ -122,6 +141,7 @@ def parse_args():
     argp = argparse.ArgumentParser()
     argp.description = "Orbcomm STX Downlink Decoder"
     argp.add_argument("--config", action="store", help="Configuration file path (.ini)", default="decoder\\orbcomm-rx.ini")
+    argp.add_argument("--file", action="store", help="Path to symbol file", default=None)
     argp.add_argument("-v", action="store_true", help="Enable verbose console output")
     argp.add_argument("--dump", action="store", help="Path to save aligned packets to")
 
@@ -138,7 +158,10 @@ def parse_config(path):
     cfgp = configparser.ConfigParser()
     cfgp.read(path)
 
-    source = cfgp.get('rx', 'input').upper()
+    if args.file == None:
+        source = cfgp.get('rx', 'input').upper()
+    else:
+        source = "FILE"
 
     return cfgp
 
