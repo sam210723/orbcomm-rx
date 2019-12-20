@@ -7,20 +7,20 @@ Frontend for Subscriber Transmitter (STX) downlink decoder
 
 import argparse
 import bitstring
+import configparser
 import math
 import socket
+import stx
 
 
 # Globals
 args = None             # Parsed CLI arguments
+config = None           # Config parser object
+source = None           # Input source type
 sck = None              # Symbol socket object
-buflen = 600            # Symbol socket buffer length (two minor frames)
+buflen = 600            # Symbol socket buffer length (one minor frame)
 packetf = None          # Packet output file
 ver = "1.0"             # orbcomm-rx version
-
-# Constants
-ADDR = "127.0.0.1"      # Default symbol address
-PORT = 1234             # Default symbol port
 
 
 def init():
@@ -32,10 +32,19 @@ def init():
     print("└──────────────────────────────────────────────┘\n")
 
     global args
+    global config
     global packetf
     
+    # Handle arguments and config file
     args = parse_args()
+    config = parse_config(args.config)
     print_config()
+
+    # Exit if input config fails
+    if not config_input():
+        if args.dump: packetf.close()
+        print("Exiting...")
+        exit(1)
 
     # Open packet file
     if args.dump:
@@ -44,7 +53,8 @@ def init():
 
     print("──────────────────────────────────────────────────────────────────────────────────\n")
 
-    if config_socket(): loop()
+    # Ender main loop
+    loop()
 
 
 def loop():
@@ -79,21 +89,29 @@ def loop():
             loffset = offset
 
 
-def config_socket():
+def config_input():
     """
-    Configures symbol UDP socket
+    Configures the selected input source
     """
 
     global sck
 
-    sck = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    
-    try:
-        sck.bind((ADDR, args.p))
-        return True
-    except socket.error as e:
-        print(e)
-        return False
+    if source == "UDP":
+        sck = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+        ip = config.get('udp', 'ip')
+        port = int(config.get('udp', 'port'))
+        addr = (ip, port)
+
+        try:
+            sck.bind(addr)
+            print("Binding UDP socket to {}:{}".format(ip, port))
+
+            return True
+        except socket.error as e:
+            print(e)
+
+            return False
 
 
 def parse_args():
@@ -103,11 +121,26 @@ def parse_args():
 
     argp = argparse.ArgumentParser()
     argp.description = "Orbcomm STX Downlink Decoder"
+    argp.add_argument("--config", action="store", help="Configuration file path (.ini)", default="decoder\\orbcomm-rx.ini")
     argp.add_argument("-v", action="store_true", help="Enable verbose console output")
-    argp.add_argument("-p", action="store", help="Symbol UDP port", default=PORT)
     argp.add_argument("--dump", action="store", help="Path to save aligned packets to")
 
     return argp.parse_args()
+
+
+def parse_config(path):
+    """
+    Parses configuration file
+    """
+
+    global source
+
+    cfgp = configparser.ConfigParser()
+    cfgp.read(path)
+
+    source = cfgp.get('rx', 'input').upper()
+
+    return cfgp
 
 
 def print_config():
@@ -115,8 +148,8 @@ def print_config():
     Prints configuration information
     """
 
-    print("INPUT PORT:    {}".format(args.p))
-    print("VERSION:       {}\n".format(ver))
+    print("INPUT:      {}".format(source))
+    print("VERSION:    {}\n".format(ver))
 
 
 try:
