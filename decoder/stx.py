@@ -27,6 +27,21 @@ class Frame():
 
         print("[FRAME]")
 
+class Packets(Enum):
+    """
+    Packet types
+    """
+
+    SYNC      = 0x65    # Synchronisation
+    MSG       = 0x1A    # Message
+    UPLINK    = 0x1B    # Uplink channel info
+    DOWNLINK  = 0x1C    # Downlink channel info
+    NCC       = 0x1D    # Network Control Centre
+    FILL      = 0x1E    # Fill data
+    EPHEMERIS = 0x1F    # Satellite ephemeris
+    ORBIT     = 0x22    # Orbital elements
+
+
 class Tools():
     """
     Various utility functions
