@@ -51,7 +51,7 @@ class Frame():
             # Check for unknown packet types
             try:
                 #TODO: TEMP
-                if ptype != 0x1E and ptype != 0x65:
+                if ptype != 0x1E and ptype != 0x65 and ptype != 0x1A:
                     print("  [{}]".format(Packets(ptype).name))
             except ValueError:
                 #print("  [UNKNOWN]  TYPE: {}".format(hex(ptype)))
@@ -65,7 +65,7 @@ class Frame():
             elif ptype == Packets.MSG.value:
                 # Parse Message Packet
                 msg = MessagePacket(packet)
-                #msg.print()
+                msg.print()
 
         print()
 
@@ -138,8 +138,8 @@ class MessagePacket():
         fields = struct.unpack(self.format, packet)
 
         # Parse fields
-        counter = 0
-        total = 0
+        counter = (fields[0] & 0x0F) + 1
+        total = fields[0] >> 4
         message = Tools.hex(None, fields[1])        # Message data
         fcs = fields[2] + fields[3]         # 16-bit Fletcher Checksum
 

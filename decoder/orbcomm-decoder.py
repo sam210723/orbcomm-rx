@@ -99,7 +99,7 @@ def loop():
         # If sync word found
         if offset:
             # Set lock state
-            if not locked: print("LOCKED")
+            #if not locked: print("LOCKED")
             locked = True
 
             # Get sync word offset value
@@ -129,7 +129,7 @@ def loop():
             loffset = offset
         else:
             # Set lock state
-            if locked: print("UNLOCKED")
+            #if locked: print("UNLOCKED")
             locked = False
 
 
