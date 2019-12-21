@@ -5,7 +5,14 @@ https://github.com/sam210723/orbcomm-rx
 Parsing functions for Orbcomm STX packets
 """
 
-SYNC = 0xA6159F
+from enum import Enum
+import struct
+from typing import NamedTuple
+
+# Constants
+SYNCWORD = 0xA6159F     # Frame synchronisation word
+PACKETLEN = 12          # Packet length (bytes)
+FRAMELEN = 600          # Minor frame length (bytes)
 
 class Frame():
     """

@@ -94,7 +94,7 @@ def loop():
         bits = bitstring.BitArray(data)
         
         # Find sync word in symbols
-        offset = bits.find(hex(STX.SYNC), bytealigned=False)
+        offset = bits.find(hex(STX.SYNCWORD), bytealigned=False)
 
         # If sync word found
         if offset:
