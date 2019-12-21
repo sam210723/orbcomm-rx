@@ -39,9 +39,33 @@ class Frame():
         # Convert LSB-first data to MSB-first
         self.data = self.t.flip(self.data)
 
-        # Parse Minor Frame Synchronisation Packet
-        sync = SyncPacket(self.data[:PACKETLEN])
-        sync.print()
+        # Loop through packets in frame
+        for i in range(50):
+            # Calculate offset in frame
+            offset = i * PACKETLEN
+
+            # Get current packet
+            packet = self.data[offset : offset + PACKETLEN]
+            ptype = packet[0]
+            
+            # Check for unknown packet types
+            try:
+                #TODO: TEMP
+                if ptype != 0x1E and ptype != 0x65:
+                    print("  [{}]".format(Packets(ptype).name))
+            except ValueError:
+                #print("  [UNKNOWN]  TYPE: {}".format(hex(ptype)))
+                continue
+
+            # Parse packet types
+            if ptype == Packets.SYNC.value:
+                # Parse Minor Frame Synchronisation Packet
+                sync = SyncPacket(packet)
+                sync.print()
+            elif ptype == Packets.MSG.value:
+                # Parse Message Packet
+                msg = MessagePacket(packet)
+                #msg.print()
 
         print()
 
@@ -62,15 +86,19 @@ class SyncPacket():
         self.parse()
     
     def parse(self):
+        """
+        Parses packet into fields
+        """
+
         # Unpack packet fields
         packet = self.data[:PACKETLEN]
         fields = struct.unpack(self.format, packet)
 
         # Parse fields
-        scid = "FM-{}".format(fields[0])    # Spacecraft ID
-        channel = bin(fields[1])            # Downlink Channel
-        counter = fields[2] >> 4            # Frame Counter
-        fcs = fields[3] + fields[4]        # 16-bit Fletcher Checksum
+        scid = "FM-{}".format(fields[0])        # Spacecraft ID
+        channel = 137 + (0.0025 * fields[1])    # Downlink Channel (MHz)
+        counter = fields[2] >> 4                # Frame Counter
+        fcs = fields[3] + fields[4]             # 16-bit Fletcher Checksum
 
         # Create named tuple from parsed fields
         tup = collections.namedtuple('SyncPacket', 'scid downlink counter fcs')
@@ -82,7 +110,50 @@ class SyncPacket():
         """
 
         if self.packet:
-            print("  [SYNC] SPACECRAFT: {}    DOWNLINK: {}    COUNTER: {}    CHECKSUM: {}".format(*self.packet))
+            print("  [SYNC] SPACECRAFT: {}    DOWNLINK: {} MHz    COUNTER: {}    CHECKSUM: {}".format(*self.packet))
+
+
+class MessagePacket():
+    """
+    Parses Message packet (0x1A)
+    """
+
+    def __init__(self, data):
+        """
+        Initialises packet class
+        """
+
+        self.data = data
+        self.format = ">xB8s2B"
+        self.packet = None
+        self.parse()
+    
+    def parse(self):
+        """
+        Parses packet into fields
+        """
+
+        # Unpack packet fields
+        packet = self.data[:PACKETLEN]
+        fields = struct.unpack(self.format, packet)
+
+        # Parse fields
+        counter = 0
+        total = 0
+        message = Tools.hex(None, fields[1])        # Message data
+        fcs = fields[2] + fields[3]         # 16-bit Fletcher Checksum
+
+        # Create named tuple from parsed fields
+        tup = collections.namedtuple('MessagePacket', 'counter total message fcs')
+        self.packet = tup(counter, total, message, fcs)
+    
+    def print(self):
+        """
+        Prints packet info to console
+        """
+
+        if self.packet:
+            print("  [MSG] PACKET: {} of {}    DATA: {}    CHECKSUM: {}".format(*self.packet))
 
 
 class Packets(Enum):
@@ -119,13 +190,13 @@ class Tools():
         return out
 
 
-    def hex(self, n):
+    def hex(self, n, order="little"):
         """
         Convert bytes to hex string
         """
 
-        integer = int.from_bytes(n, byteorder="little")
-        return hex(integer)[2:].upper()
+        integer = int.from_bytes(n, order)
+        return "0x" + hex(integer)[2:].upper()
 
 
     def fcs(self, data):
