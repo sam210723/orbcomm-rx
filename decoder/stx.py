@@ -26,3 +26,30 @@ class Frame():
         """
 
         print("[FRAME]")
+
+class Tools():
+    """
+    Various utility functions
+    """
+
+    def flip(self, n):
+        """
+        Flip bits in bytes
+        """
+
+        out = b''
+
+        for i in n:
+            bits = '{:0{width}b}'.format(i, width=8)
+            out += bytes([int(bits[::-1], 2)])
+        
+        return out
+
+
+    def hex(self, n):
+        """
+        Convert bytes to hex string
+        """
+
+        integer = int.from_bytes(n, byteorder="little")
+        return hex(integer)[2:].upper()
