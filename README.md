@@ -3,10 +3,13 @@
 
 ## Demodulator
 The STX downlinks are modulated using Symmetrical Differential Phase Shift Keying (SDPSK) at a data rate of 4.8 kbps.
+
 ![Demodulator screenshot](demodulator/screenshot.png)
 
 ## Decoder
-WIP
+
+
+![Decoder screenshot](decoder/screenshot.png)
 
 ## Resources
   - [“Ever wondered what is on the Orbcomm Satellite Downlink?”](http://mdkenny.customer.netspace.net.au/Orbcomm.pdf) - Mike Kenny
